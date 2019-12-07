@@ -1,10 +1,12 @@
 .idea/
 Logic/ExternalData/*
 Logic/Datasets/*
+Logic/Classifiers/*/*.h5
+Logic/Classifiers/*/*.yml
 **__pycache__/
+!*.py
 Logic/analyzer.py
 client.py
-!*.py
 !**README.md
 !**.EMPTY
 

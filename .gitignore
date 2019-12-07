@@ -1,0 +1,8 @@
+.idea/
+ExternalData/*
+Datasets/*
+**__pycache__/
+Logic/analyzer.py
+client.py
+!**README.md
+!**.EMPTY

@@ -1,0 +1,8 @@
+numpy
+fastAPI
+uvicorn
+scikit-learn
+tensorflow
+keras
+pandas
+starlette

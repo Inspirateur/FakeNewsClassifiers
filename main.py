@@ -4,9 +4,9 @@ from Logic.preprocessing import tokenize
 
 def wikimodel():
 	from Logic.Classifiers.WikiInfoLinks.wikilinks_classifier import WikiLinksClassifier
-	from Logic.preprocessing import Vectorizer
+	from Logic.preprocessing import TFIDFVectorizer
 
-	m = Model(WikiLinksClassifier(), "fake-news-kaggle", Vectorizer(tokenize))
+	m = Model(WikiLinksClassifier(), "fake-news-kaggle", TFIDFVectorizer(tokenize))
 	m.load_or_train()
 	return m
 
@@ -29,5 +29,4 @@ def deeplmodel():
 	return m
 
 
-a = nbmodel().analyze("barack obama is a muslim")
-pass
+a = wikimodel().analyze("barack obama is a muslim")

@@ -45,11 +45,12 @@ class Classifier:
 		"""
 		Must save the model on the disk
 		"""
-		raise NotImplementedError
+		pass
 
 	def load(self):
 		"""
 		Must load the model from the disk
 		:raises: FileNotFoundError if the save file is not found
+		(also raises that by default instead of NotImplementedError for convenience)
 		"""
-		raise NotImplementedError
+		raise FileNotFoundError

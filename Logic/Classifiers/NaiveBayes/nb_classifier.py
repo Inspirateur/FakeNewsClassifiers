@@ -46,10 +46,3 @@ class NBClassifier(Classifier):
 			if token in vocab:
 				probs[i] = x[0, vocab[token]]
 		return self.model.predict_proba(x)[0, 0], html_highlight(probs, tokens)
-
-	def save(self):
-		pass
-
-	def load(self):
-		# this model is quick to train so we don't bother save/load-ing it
-		raise FileNotFoundError

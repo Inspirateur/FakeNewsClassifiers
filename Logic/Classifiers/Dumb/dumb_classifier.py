@@ -16,10 +16,3 @@ class DumbClassifier(Classifier):
 
 	def analyze(self, x, tokens, vocab) -> Tuple[float, str]:
 		return np.random.random(), "<p>Just because</p>"
-
-	def save(self):
-		pass
-
-	def load(self):
-		# this model is quick to train so we don't bother save/load-ing it
-		raise FileNotFoundError

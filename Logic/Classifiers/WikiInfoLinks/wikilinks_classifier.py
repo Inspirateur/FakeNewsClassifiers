@@ -55,8 +55,6 @@ class WikiLinksClassifier(Classifier):
 		else:
 			return None, ""
 
-	def save(self):
-		pass
-
 	def load(self):
+		# we override that to bypass the default FileNotFoundError and skip the training
 		pass

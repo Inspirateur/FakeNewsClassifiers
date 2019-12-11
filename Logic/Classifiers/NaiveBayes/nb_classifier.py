@@ -41,13 +41,11 @@ class NBClassifier(Classifier):
 		return self.model.predict(inputs)
 
 	def analyze(self, x, tokens, vocab) -> Tuple[float, str]:
-		preds = self.model.predict_proba(x)[0]
-		pred_i = np.argmax(preds)
 		probs = np.zeros(shape=len(tokens))
 		for i, token in enumerate(tokens):
 			if token in vocab:
 				probs[i] = x[0, vocab[token]]
-		return preds[0], html_highlight(probs, tokens)
+		return self.model.predict_proba(x)[0, 0], html_highlight(probs, tokens)
 
 	def save(self):
 		pass

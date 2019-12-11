@@ -35,9 +35,9 @@ class Classifier:
 		"""
 		raise NotImplementedError
 
-	def analyze(self, x, tokens) -> Tuple[float, str]:
+	def analyze(self, x, tokens, vocab) -> Tuple[float, str]:
 		"""
-		Given a single input with the tokenized version, return a score and an analysis
+		Given a single input with the tokenized version and a vocab, return a score and an analysis
 		"""
 		raise NotImplementedError
 

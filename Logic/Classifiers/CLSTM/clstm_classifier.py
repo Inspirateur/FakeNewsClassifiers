@@ -20,7 +20,7 @@ class CLSTMClassifier(Classifier):
 	def predict(self, inputs: np.ndarray) -> np.ndarray:
 		return self.model.predict(inputs)
 
-	def analyze(self, x, tokens) -> Tuple[float, str]:
+	def analyze(self, x, tokens, vocab) -> Tuple[float, str]:
 		pred = 1-self.model.predict(x)[0, 0]
 		return pred, "<p>This is a black box for now.</p>"
 

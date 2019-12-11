@@ -15,20 +15,12 @@ def html_highlight(probs: np.ndarray, tokens):
 	topmask[arg_top_n(probs, 20)] = True
 	threshold = np.amax(probs[topmask])/3.
 	probmask = topmask & (probs > threshold)
-	last = -1
 	words = []
-	cache = {}
-	i = 0
-	for j, token in enumerate(tokens):
-		if (token in cache and cache[token]) or probmask[i]:
-			if j-1 > last:
-				words.append("...")
-			words.append(tokens[j])
-			last = j
-			cache[token] = True
-		else:
-			cache[token] = False
-		i = len(cache)
+	for i, token in enumerate(tokens):
+		if probmask[i]:
+			words.append(token)
+		elif words and words[-1] != "...":
+			words.append("...")
 	return (
 		f"<p>The most important words were:</p>"
 		f"<p>«{' '.join(words)}»</p>"
@@ -48,10 +40,13 @@ class NBClassifier(Classifier):
 	def predict(self, inputs: np.ndarray) -> np.ndarray:
 		return self.model.predict(inputs)
 
-	def analyze(self, x, tokens) -> Tuple[float, str]:
+	def analyze(self, x, tokens, vocab) -> Tuple[float, str]:
 		preds = self.model.predict_proba(x)[0]
 		pred_i = np.argmax(preds)
-		probs = np.exp(self.model.feature_log_prob_[pred_i, x.indices])
+		probs = np.zeros(shape=len(tokens))
+		for i, token in enumerate(tokens):
+			if token in vocab:
+				probs[i] = x[0, vocab[token]]
 		return preds[0], html_highlight(probs, tokens)
 
 	def save(self):

@@ -1,18 +1,21 @@
-import json
+import pickle
 from typing import Tuple
 import numpy as np
 from Logic.Classifiers.classifier import Classifier
-from Logic.preprocessing import Vectorizer
 
 
 def sigmoid(x):
-	return 1./1.+np.exp(-x)
+	return 1./(1.+np.exp(-x))
 
 
 class WikiLinksClassifier(Classifier):
 	def __init__(self):
-		with open("Logic/Datasets/Wikipedia-Infolinks/infolinks.json", "r") as flinks:
-			self.links = json.load(flinks)
+		print("Loading Wikipedia links data...", end=' ', flush=True)
+		with open("Logic/ExternalData/infolinks.pickle", "rb") as flinks:
+			self.links = pickle.load(flinks, fix_imports=False)
+		with open("Logic/ExternalData/redirects.pickle", "rb") as fredirs:
+			self.redirs = pickle.load(fredirs, fix_imports=False)
+		print("Done")
 
 	def _train(self, inputs: np.ndarray, labels: np.ndarray):
 		pass
@@ -31,19 +34,24 @@ class WikiLinksClassifier(Classifier):
 					return path
 		return None
 
-	def analyze(self, x, tokens) -> Tuple[float, str]:
+	def analyze(self, x, tokens, _) -> Tuple[float, str]:
 		x = x[0]
-		known_tokens = set()
+		token_set = set()
+		known_tokens = []
 		for token in x:
-			if token.lower() in self.links:
-				known_tokens.add(token.lower())
-		known_tokens = list(known_tokens)
+			token = token.lower()
+			if token not in token_set:
+				if token in self.redirs:
+					token = self.redirs[token]
+				if token in self.links:
+					token_set.add(token)
+					known_tokens.append(token)
 		if len(known_tokens) <= 1:
 			return None, ""
 		known_tokens = known_tokens[0:2]
 		path = self.shortest_path(known_tokens[0], known_tokens[1])
 		if path:
-			return sigmoid(len(path)*-1+3), path
+			return sigmoid(len(path)*-1+3), f"<p>{' -> '.join(reversed(path))}</p>"
 		else:
 			return None, ""
 

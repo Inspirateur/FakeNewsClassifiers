@@ -14,7 +14,7 @@ class DumbClassifier(Classifier):
 	def predict(self, inputs: np.ndarray) -> np.ndarray:
 		return np.full(shape=inputs.shape, fill_value=self.best_label)
 
-	def analyze(self, x, tokens) -> Tuple[float, str]:
+	def analyze(self, x, tokens, vocab) -> Tuple[float, str]:
 		return np.random.random(), "<p>Just because</p>"
 
 	def save(self):

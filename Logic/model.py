@@ -31,5 +31,6 @@ class Model:
 	def analyze(self, query):
 		return self.classifier.analyze(
 			self.vectorizer.transform(np.array([query], dtype=np.object)),
-			self.vectorizer.tokenize(query)
+			self.vectorizer.tokenize(query),
+			self.vectorizer.vocab
 		)

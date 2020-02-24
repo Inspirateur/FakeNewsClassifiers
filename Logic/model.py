@@ -1,13 +1,14 @@
 import numpy as np
 from Logic.Classifiers.classifier import Classifier
-import Logic.Datasets.datasets as datasets
+import Logic.Datasets.dataset as datasets
 from Logic.preprocessing import Vectorizer
 
 
 class Model:
 	def __init__(self, classifier: Classifier, dataset: str, vectorizer: Vectorizer = Vectorizer()):
 		self.classifier = classifier
-		self.dataset = dataset
+		self.d = datasets.get(dataset)
+		print(self.d.details())
 		self.vectorizer = vectorizer
 
 	def load_or_train(self):
@@ -21,8 +22,10 @@ class Model:
 
 	def train(self):
 		print(f"training {self.classifier.__class__.__name__}...", end=" ", flush=True)
-		inputs, labels = datasets.get(self.dataset)
-		acc = self.classifier.train(self.vectorizer.fit_transform(inputs), labels)
+		acc = self.classifier.train(
+			self.vectorizer.fit_transform(self.d.train.X),
+			self.d.train.y
+		)
 		print(f"Acc = {acc:.1%}")
 		print("Saving the model...", end=" ", flush=True)
 		self.classifier.save()

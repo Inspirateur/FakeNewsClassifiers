@@ -1,32 +1,34 @@
-from Logic.model import Model
 from Logic.preprocessing import tokenize
+datas = ["reddit", "fake-news-kaggle", "LIAR"]
 
 
-def wikimodel():
+def wikimodel(data: str):
 	from Logic.Classifiers.WikiInfoLinks.wikilinks_classifier import WikiLinksClassifier
-	from Logic.preprocessing import TFIDFVectorizer
+	from Logic.preprocessing import Vectorizer
 
-	m = Model(WikiLinksClassifier(), "fake-news-kaggle", TFIDFVectorizer(tokenize))
-	m.load_or_train()
-	return m
+	return WikiLinksClassifier(data, Vectorizer(tokenize))
 
 
-def nbmodel():
+def nbmodel(data: str):
 	from Logic.Classifiers.NaiveBayes.nb_classifier import NBClassifier
 	from Logic.preprocessing import TFIDFVectorizer
 
-	m = Model(NBClassifier(), "fake-news-kaggle", TFIDFVectorizer(tokenize))
-	m.load_or_train()
-	return m
+	return NBClassifier(data, TFIDFVectorizer(tokenize))
 
 
-def deeplmodel():
+def deeplmodel(data: str):
 	from Logic.Classifiers.CLSTM.clstm_classifier import CLSTMClassifier
 	from Logic.preprocessing import GloVeVectorizer
 
-	m = Model(CLSTMClassifier(), "fake-news-kaggle", GloVeVectorizer(tokenize))
-	m.load_or_train()
-	return m
+	return CLSTMClassifier(data, GloVeVectorizer(tokenize))
 
 
-a = wikimodel().analyze("barack obama is a muslim")
+def transfomodel(data: str):
+	from Logic.Classifiers.Transformer.transformer_classifier import TransformerClassifier
+	from Logic.preprocessing import Vectorizer
+
+	return TransformerClassifier(data, Vectorizer())
+
+
+m = transfomodel("reddit")
+m.evaluate(1)

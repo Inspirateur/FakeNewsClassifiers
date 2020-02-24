@@ -6,3 +6,8 @@ tensorflow
 keras
 pandas
 starlette
+matplotlib
+torch
+tensorboardX
+transformers
+ktrain

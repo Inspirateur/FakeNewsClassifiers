@@ -8,19 +8,19 @@ from Logic.Classifiers.classifier import Classifier
 class CLSTMClassifier(Classifier):
 	model: Sequential
 
-	def train(self, inputs: np.ndarray, labels: np.ndarray, _=10) -> float:
+	def train(self) -> float:
 		self.model = Sequential()
-		self.model.add(InputLayer(input_shape=inputs.shape[1:]))
-		self.model.add(LSTM(units=1024, dropout=.2))
+		X = self.vec.fit_transform(self.d.train.X)
+		self.model.add(InputLayer(input_shape=X.shape[1:]))
+		self.model.add(LSTM(units=350, dropout=.2))
 		self.model.add(Dense(1))
 		self.model.compile(optimizer="adam", loss="mean_squared_error", metrics=['accuracy'])
-		history = self.model.fit(inputs, labels, batch_size=16, epochs=2).history
-		return history["accuracy"][-1]
+		self.model.fit(X, self.d.train.y, batch_size=16, epochs=15, validation_split=.05)
 
 	def predict(self, inputs: np.ndarray) -> np.ndarray:
 		return self.model.predict(inputs)
 
-	def analyze(self, x, tokens, vocab) -> Tuple[float, str]:
+	def analyze(self, x) -> Tuple[float, str]:
 		pred = 1-self.model.predict(x)[0, 0]
 		return pred, "<p>This is a black box for now.</p>"
 

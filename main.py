@@ -5,9 +5,9 @@ from Logic.Classifiers.Transformer.transformer_classifier import TransformerClas
 
 
 # datasets: reddit, fake-news-kaggle, LIAR
-m = TransformerClassifier("reddit")
+m = TransformerClassifier("fake-news-kaggle")
 m.train()
 m.evaluate()
 m.save()
-m.load()
-m.evaluate()
+# m.load()
+# m.evaluate()

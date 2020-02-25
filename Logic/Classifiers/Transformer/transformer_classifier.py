@@ -33,8 +33,8 @@ class TransformerClassifier(Classifier):
 		pass
 
 	def save(self):
-		self.predictor.save("Logic/Classifiers/Transformer/save")
+		self.predictor.save(f"Logic/Classifiers/Transformer/Saves/save_{self.d.name}")
 
 	def load(self):
 		self.vec = Vectorizer(tokenize)
-		self.predictor = ktrain.load_predictor("Logic/Classifiers/Transformer/save")
+		self.predictor = ktrain.load_predictor(f"Logic/Classifiers/Transformer/Saves/save_{self.d.name}")

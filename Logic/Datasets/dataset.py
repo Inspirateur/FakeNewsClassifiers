@@ -69,10 +69,11 @@ class Data:
 
 
 class Dataset:
-	def __init__(self, train: Data, valid: Data, test: Data, classes: List[str] = None):
+	def __init__(self, train: Data, valid: Data, test: Data, name: str = "", classes: List[str] = None):
 		self.train: Data = train
 		self.test: Data = test
 		self.valid: Data = valid
+		self.name = name
 		if classes:
 			self.classes = np.array(classes)
 		else:

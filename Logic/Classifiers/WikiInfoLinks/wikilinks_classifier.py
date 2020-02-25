@@ -4,7 +4,7 @@ from time import time
 from typing import Tuple
 import numpy as np
 from Logic.Classifiers.classifier import Classifier
-from Logic.preprocessing import Vectorizer
+from Logic.preprocessing import Vectorizer, tokenize
 
 
 def get_sentences(x):
@@ -20,9 +20,10 @@ def get_sentences(x):
 class WikiLinksClassifier(Classifier):
 	weights: dict
 	alpha: float
+	vec: Vectorizer
 
-	def __init__(self, data: str, vectorizer: Vectorizer = None, alpha=3):
-		Classifier.__init__(self, data, vectorizer)
+	def __init__(self, data: str, alpha=3):
+		Classifier.__init__(self, data)
 		self.alpha = alpha
 		self.cache: dict = {}
 		print("Loading Wikipedia links data...", end=' ', flush=True)
@@ -74,14 +75,15 @@ class WikiLinksClassifier(Classifier):
 		# a sigmoid function
 		return 1./(1.+np.exp(len(path)+self.alpha))
 
-	def compute_weights(self, inputs: np.ndarray, labels: np.ndarray):
+	def compute_weights(self):
 		print("Computing weights...", end=' ', flush=True)
 		wset = set()
-		for x in inputs:
+		X = self.vec.transform(self.d.train.X)
+		for x in X:
 			wset.update(x)
 		revoc = {w: i for i, w in enumerate(wset)}
 		words = np.full(shape=(len(wset), 2), fill_value=0.1)
-		for x, label in zip(inputs, labels):
+		for x, label in zip(X, self.d.train.y):
 			for w in x:
 				words[revoc[w], label] += 1
 		# compute the entropy of each words
@@ -91,9 +93,9 @@ class WikiLinksClassifier(Classifier):
 		self.weights.update({w: weighted[i] for i, w in enumerate(wset)})
 		print("Done")
 
-	def train(self, inputs: np.ndarray, labels: np.ndarray, _=10) -> float:
-		self.compute_weights(inputs, labels)
-		return Classifier.train(self, inputs, labels, k=1)
+	def train(self) -> float:
+		self.vec = Vectorizer(tokenize)
+		self.compute_weights()
 
 	def predict(self, inputs: np.ndarray) -> np.ndarray:
 		res = np.full(shape=(inputs.shape[0],), fill_value=None)
@@ -111,7 +113,8 @@ class WikiLinksClassifier(Classifier):
 				res[i] = 1 if sum((s*w for s, w in scores), 0.)/sum((w for _, w in scores), 0.) > .5 else 0
 		return res
 
-	def analyze(self, x, tokens, vocab) -> Tuple[float, str]:
+	def analyze(self, query) -> Tuple[float, str]:
+		x = self.vec.tokenize(query)
 		source, target = self.get_source_target(x[0])
 		path = self.shortest_path(source, target) if source else None
 		if path:

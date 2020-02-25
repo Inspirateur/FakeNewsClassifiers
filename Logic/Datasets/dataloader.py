@@ -12,7 +12,7 @@ def get(dataset: str) -> Dataset:
 			"false": "False", "pants-fire": "False", "barely-true": "False",
 			"half-true": "True", "mostly-true": "True", "true": "True"
 		}
-		for name in ["train", "test", "valid"]:
+		for name in ["train", "valid", "test"]:
 			df = pd.read_csv(
 				f"{folder}/LIAR/{name}.tsv", sep="\t", header=None, names=["label", "text"], usecols=[1, 2]
 			)
@@ -26,4 +26,5 @@ def get(dataset: str) -> Dataset:
 	elif dataset == "reddit":
 		raw = np.load(f"{folder}/Reddit/data_train.pkl", allow_pickle=True)
 		data = Data(np.array(raw[0]), np.array(raw[1]))
-		return Dataset(*data.split(.8, .1))
+		trn, val, tst = data.split(.8, .1)
+		return Dataset(trn[:1000], val[:500], tst[:500])

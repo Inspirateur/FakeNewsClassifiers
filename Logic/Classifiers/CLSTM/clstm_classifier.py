@@ -3,12 +3,15 @@ from tensorflow.keras.layers import InputLayer, LSTM, Dense
 from tensorflow.keras.models import Sequential, load_model
 import numpy as np
 from Logic.Classifiers.classifier import Classifier
+from Logic.preprocessing import GloVeVectorizer, tokenize
 
 
 class CLSTMClassifier(Classifier):
 	model: Sequential
+	vec: GloVeVectorizer
 
 	def train(self) -> float:
+		self.vec = GloVeVectorizer(tokenize)
 		self.model = Sequential()
 		X = self.vec.fit_transform(self.d.train.X)
 		self.model.add(InputLayer(input_shape=X.shape[1:]))

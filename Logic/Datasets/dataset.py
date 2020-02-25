@@ -15,7 +15,7 @@ class Data:
 		self.X = self.X[p]
 		self.y = self.y[p]
 
-	def split(self, *fracs: float) -> Tuple["Data"]:
+	def split(self, *fracs: float) -> Tuple["Data", ...]:
 		assert sum(fracs, 0.) < 1
 		self.shuffle()
 		datas = []
@@ -69,7 +69,7 @@ class Data:
 
 
 class Dataset:
-	def __init__(self, train: Data, test: Data, valid: Data, classes: List[str] = None):
+	def __init__(self, train: Data, valid: Data, test: Data, classes: List[str] = None):
 		self.train: Data = train
 		self.test: Data = test
 		self.valid: Data = valid

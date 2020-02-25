@@ -1,12 +1,11 @@
 from typing import Tuple
 import numpy as np
 from Logic.Classifiers.classifier import Classifier
-from Logic.preprocessing import Vectorizer
 
 
 class DumbClassifier(Classifier):
-	def __init__(self, data: str, vectorizer: Vectorizer = None, best_label=None):
-		Classifier.__init__(self, data, vectorizer)
+	def __init__(self, data: str, best_label=None):
+		Classifier.__init__(self, data)
 		self.best_label = best_label
 
 	def train(self):

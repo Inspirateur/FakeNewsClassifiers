@@ -1,20 +1,34 @@
 from typing import Tuple
 import numpy as np
 import matplotlib.pyplot as plt
-from Logic.preprocessing import Vectorizer
 from Logic.Datasets.dataset import Dataset
 import Logic.Datasets.dataloader as dataloader
 
 
 class Classifier:
-	def __init__(self, data: str, vectorizer: Vectorizer = None):
+	def __init__(self, data: str):
 		self.d: Dataset = dataloader.get(data)
 		print(self.d.detail())
-		self.vec = vectorizer
 
-	def evaluate(self, k=10) -> np.ndarray:
+	def evaluate(self):
 		"""
-		Use _train and _predict to perform a k-fold validation and compute the confusion matrix
+		Evaluate the model once, doesn't train it
+		"""
+		# define the confusion matrices
+		c = self.d.classes
+		conf_mat = np.zeros(shape=(len(c), len(c)), dtype=np.float)
+		preds = self.predict(self.d.test.X)
+		# it is possible that some prediction get None score with some classifier
+		# we don't count them in the accuracy score
+		preds = np.ma.masked_invalid(preds)
+		y = np.ma.masked_where(preds.mask, self.d.test.y)
+		for j in range(len(preds)):
+			conf_mat[preds[j], y[j]] += 1
+		self.display_confmat(conf_mat)
+
+	def k_evaluate(self, k=10):
+		"""
+		Use k-fold validation to evaluate the model, train it each time
 		"""
 		# define the confusion matrices
 		c = self.d.classes
@@ -31,7 +45,9 @@ class Classifier:
 			for j in range(len(preds)):
 				conf_mat[i, preds[j], y[j]] += 1
 		# average the unormalized confmat
-		conf_mat = conf_mat.mean(axis=0)
+		self.display_confmat(conf_mat.mean(axis=0))
+
+	def display_confmat(self, conf_mat):
 		# compute the accuracy
 		acc = np.sum(conf_mat.diagonal())/np.sum(conf_mat)
 		print(f"acc={acc:.1%}")

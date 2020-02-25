@@ -2,9 +2,10 @@ test.py
 .idea/
 Logic/ExternalData/*
 Logic/Datasets/*
-Logic/Classifiers/*/*.h5
-Logic/Classifiers/*/*.yml
+Logic/Classifiers/**/*.h5
+Logic/Classifiers/**/*.yml
 **__pycache__/
+Logic/Classifiers/**/save*
 !*.py
 Logic/analyzer.py
 client.py

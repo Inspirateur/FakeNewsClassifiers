@@ -2,7 +2,7 @@ from typing import Tuple
 import numpy as np
 from sklearn.naive_bayes import MultinomialNB
 from Logic.Classifiers.classifier import Classifier
-from Logic.preprocessing import Vectorizer
+from Logic.preprocessing import TFIDFVectorizer, tokenize
 
 
 def arg_top_n(array: np.ndarray, n: int):
@@ -30,12 +30,14 @@ def html_highlight(probs: np.ndarray, tokens):
 
 class NBClassifier(Classifier):
 	model: MultinomialNB
+	vec: TFIDFVectorizer
 
-	def __init__(self, data: str, vectorizer: Vectorizer = None, alpha=.2):
-		Classifier.__init__(self, data, vectorizer)
+	def __init__(self, data: str, alpha=.2):
+		Classifier.__init__(self, data)
 		self.alpha = alpha
 
 	def train(self):
+		self.vec = TFIDFVectorizer(tokenize)
 		self.model = MultinomialNB(alpha=self.alpha)
 		self.model.fit(self.vec.fit_transform(self.d.train.X), self.d.train.y)
 

@@ -14,7 +14,7 @@ def arg_top_n(array: np.ndarray, n: int):
 def html_highlight(probs: np.ndarray, tokens):
 	topmask = np.zeros(len(probs), dtype=np.bool)
 	topmask[arg_top_n(probs, 20)] = True
-	threshold = np.amax(probs[topmask])/3.
+	threshold = np.amax(probs[topmask])/4.
 	probmask = topmask & (probs > threshold)
 	words = []
 	for i, token in enumerate(tokens):
@@ -51,4 +51,4 @@ class NBClassifier(Classifier):
 		for i, token in enumerate(tokens):
 			if token in self.vec.vocab:
 				probs[i] = x[0, self.vec.vocab[token]]
-		return self.model.predict_proba(x)[0, 0], html_highlight(probs, tokens)
+		return self.d.score(self.model.predict_proba(x).mean(axis=0)), html_highlight(probs, tokens)

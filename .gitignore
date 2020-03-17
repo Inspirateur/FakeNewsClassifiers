@@ -2,8 +2,7 @@ test.py
 .idea/
 Logic/ExternalData/*
 Logic/Datasets/*
-Logic/Classifiers/**/*.h5
-Logic/Classifiers/**/*.yml
+Logic/Classifiers/**/*
 **__pycache__/
 Logic/Classifiers/**/save*
 !*.py

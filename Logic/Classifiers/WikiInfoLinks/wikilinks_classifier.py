@@ -24,6 +24,7 @@ class WikiLinksClassifier(Classifier):
 
 	def __init__(self, data: str, alpha=3):
 		Classifier.__init__(self, data)
+		self.vec = Vectorizer(tokenize)
 		self.alpha = alpha
 		self.cache: dict = {}
 		print("Loading Wikipedia links data...", end=' ', flush=True)

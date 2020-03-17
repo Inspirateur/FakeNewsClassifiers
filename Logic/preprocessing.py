@@ -6,8 +6,6 @@ import pandas as pd
 from keras_preprocessing.text import Tokenizer
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-import torch
-from transformers.tokenization_distilbert import DistilBertTokenizer
 regtoken = re.compile(r"(?u)\b\w+\b")
 
 
@@ -18,7 +16,7 @@ def tokenize(sentence: str):
 class Vectorizer:
 	def __init__(self, tokenizer: Callable = lambda x: x):
 		self.tokenize = tokenizer
-		self.vocab = {}
+		self.vocab = defaultdict(int)
 
 	def fit_transform(self, inputs: np.ndarray) -> np.ndarray:
 		return self.transform(inputs)
@@ -50,7 +48,7 @@ class GloVeVectorizer(Vectorizer):
 	vect: Tokenizer
 	embedding: pd.DataFrame
 
-	def __init__(self, tokenizer: Callable = lambda x: x, maxlen: int = 50):
+	def __init__(self, tokenizer: Callable = lambda x: x, maxlen: int = 60):
 		Vectorizer.__init__(self, tokenizer)
 		self.maxlen = maxlen
 		self.dims = 100
@@ -69,14 +67,3 @@ class GloVeVectorizer(Vectorizer):
 			for j, token in enumerate(self.tokenize(inputs[i])[:self.maxlen]):
 				res[i, j] = self.vocab[token]
 		return res
-
-
-"""
-class BertVectorizer(Vectorizer):
-	def __init__(self, tokenizer=lambda x: x):
-		Vectorizer.__init__(self, tokenizer)
-		self.tokenize = DistilBertTokenizer.from_pretrained("distilbert-base-uncased")
-
-	def transform(self, inputs: np.ndarray) -> np.ndarray:
-		return torch.tensor(self.tokenize.encode(inputs.tolist())).unsqueeze(0)
-"""

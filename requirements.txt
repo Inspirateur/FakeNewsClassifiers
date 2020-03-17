@@ -11,3 +11,4 @@ torch
 tensorboardX
 transformers
 ktrain
+eli5

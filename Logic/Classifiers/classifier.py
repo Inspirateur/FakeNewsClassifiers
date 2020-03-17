@@ -56,7 +56,7 @@ class Classifier:
 		plt.imshow(conf_mat)
 		plt.colorbar()
 		tickvals = list(range(len(self.d.classes)))
-		ticklabs = self.d.classes.tolist()
+		ticklabs = list(self.d.classes.keys())
 		plt.xticks(tickvals, ticklabs, rotation=45, ha="right")
 		plt.yticks(tickvals, ticklabs)
 		plt.clim(0, 1)

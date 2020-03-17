@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import Dict, Tuple, Union
 import numpy as np
 sets = ["train", "valid", "test"]
 
@@ -69,16 +69,19 @@ class Data:
 
 
 class Dataset:
-	def __init__(self, train: Data, valid: Data, test: Data, name: str = "", classes: List[str] = None):
+	def __init__(self, train: Data, valid: Data, test: Data, name: str = "", classes: Union[Dict[str, float], list] = None):
 		self.train: Data = train
 		self.test: Data = test
 		self.valid: Data = valid
 		self.name = name
-		if classes:
-			self.classes = np.array(classes)
+		if not classes:
+			classes = np.unique(np.concatenate((self.train.y, self.valid.y, self.test.y)))
+		if isinstance(classes, dict):
+			self.classes = {c: classes[c] for c in sorted(list(classes.keys()))}
 		else:
-			self.classes = np.unique(self.train.y)
-			cmap = {c: i for i, c in enumerate(self.classes)}
+			self.classes = {c: float(c) for c in sorted(classes)}
+		if len(self.train.y) and not isinstance(self.train.y[0], int):
+			cmap = {c: i for i, c in enumerate(self.classes.keys())}
 			cf = np.vectorize(cmap.get)
 			self.train.y = cf(self.train.y)
 			self.test.y = cf(self.test.y)
@@ -102,8 +105,8 @@ class Dataset:
 		self.test = total[trn_len+val_len:]
 
 	def detail(self):
-		header = ["", "examples", "med_len", "avg_len"]+self.classes.tolist()
-		table = np.empty(shape=(len(sets)+1, len(header)), dtype=np.object)
+		header = ["", "examples", "med_len", "avg_len"]+[str(c) for c in self.classes]
+		table = np.full(shape=(len(sets)+1, len(header)), dtype=np.object, fill_value="0")
 		for i, col in enumerate(header):
 			table[0, i] = col
 		for i, s in enumerate(sets):
@@ -115,7 +118,7 @@ class Dataset:
 			classes, counts = self[s].classes
 			counts = counts/counts.sum()
 			for c, count in zip(classes, counts):
-				table[i+1, c+4] = str(round(count, 2))
+				table[i+1, c+4] = str(int(round(count*100)))+'%'
 		lentable = np.vectorize(len)(table)
 		lentable = -lentable+np.amax(lentable, axis=0)+2
 		text = ""
@@ -124,3 +127,10 @@ class Dataset:
 				text += ' '*lentable[i, j]+table[i, j]
 			text += '\n'
 		return text
+
+	def score(self, cprobs) -> float:
+		return sum((
+			self.classes[list(self.classes.keys())[i]]*p
+			for i, p in enumerate(cprobs)),
+			0.
+		)

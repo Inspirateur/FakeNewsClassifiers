@@ -6,6 +6,7 @@ from Logic.Classifiers.classifier import Classifier
 import ktrain
 from ktrain import text
 from ktrain.text.predictor import TextPredictor
+# TODO: use huggingface instead
 
 
 class TransformerClassifier(Classifier):

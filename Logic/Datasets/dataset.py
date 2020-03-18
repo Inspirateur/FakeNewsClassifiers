@@ -17,7 +17,6 @@ class Data:
 
 	def split(self, *fracs: float) -> Tuple["Data", ...]:
 		assert sum(fracs, 0.) < 1
-		self.shuffle()
 		datas = []
 		start = 0
 		end = 0

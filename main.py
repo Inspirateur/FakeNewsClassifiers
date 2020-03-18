@@ -36,7 +36,7 @@ def sample(chunk_size=100, freq=5):
 
 def test():
 	# datasets: reddit, fake-news-kaggle, LIAR, fake-news-corpus
-	m = LSTMClassifier("fake-news-corpus")
+	m = TransformerClassifier("fake-news-corpus")
 	m.load()
 	m.evaluate()
 	# s, a = m.analyze("Shocking truth ! President barack obama is actually a lizard men !")

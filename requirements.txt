@@ -1,15 +1,10 @@
 numpy
-fastAPI
-uvicorn
 scikit-learn
 tensorflow
 keras
 pandas
-starlette
 matplotlib
 torch
 tensorboardX
 transformers
-ktrain
-eli5
 tqdm

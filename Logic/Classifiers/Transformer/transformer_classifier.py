@@ -1,12 +1,11 @@
 import os
-from typing import Tuple
 import sys
 import numpy as np
 from Logic.Classifiers.classifier import Classifier
 from transformers.modeling_distilbert import DistilBertForSequenceClassification
 from transformers import BertTokenizer
 import torch
-from tqdm import tqdm, trange
+from tqdm import tqdm
 _path = "Logic/Classifiers/Transformer/"
 
 

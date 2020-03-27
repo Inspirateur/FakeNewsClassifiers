@@ -4,8 +4,7 @@ This repository has been rewritten and improved by me (Teo Orthlieb) after the p
 to make it more usable and up-to-date.  
 
 ## Notes
-Datasets must be put in Datasets/ with one folder per dataset, like so
-Datasets:
+Datasets must be put in Datasets/ with one folder per dataset:
  - LIAR ([paper](https://sites.cs.ucsb.edu/~william/papers/acl2017.pdf), [download](https://sites.cs.ucsb.edu/~william/data/liar_dataset.zip))
  - fake-news-kaggle ([page](https://www.kaggle.com/c/fake-news/data))
  - Fake-News-corpus ([page](https://github.com/several27/FakeNewsCorpus))

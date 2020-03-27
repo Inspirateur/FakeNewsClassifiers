@@ -1,3 +1,4 @@
+from Logic.Classifiers.classifier import Classifier
 from Logic.Classifiers.WikiInfoLinks.wikilinks_classifier import WikiLinksClassifier
 from Logic.Classifiers.NaiveBayes.nb_classifier import NBClassifier
 from Logic.Classifiers.LSTM.lstm_classifier import LSTMClassifier
@@ -34,12 +35,23 @@ def sample(chunk_size=100, freq=5):
 	df.to_csv(f"Logic/Datasets/Fake-News-corpus/news_shuffled.csv")
 
 
-def test():
-	# datasets: reddit, fake-news-kaggle, LIAR, fake-news-corpus
-	m = TransformerClassifier("fake-news-corpus")
-	m.load()
-	m.evaluate()
-	# s, a = m.analyze("Shocking truth ! President barack obama is actually a lizard men !")
+def test_train(model: Classifier):
+	model.train()
+	model.evaluate()
+	model.save()
 
 
-test()
+def test_load(model: Classifier):
+	model.load()
+	model.evaluate()
+
+
+def test_analyze(model: Classifier):
+	model.load()
+	sentence = "Incredible ! President Barack Obama is actually a lizard men !"
+	print(sentence)
+	print(model.analyze(sentence))
+
+
+# datasets: reddit, fake-news-kaggle, LIAR, fake-news-corpus
+test_analyze(TransformerClassifier("fake-news-corpus"))

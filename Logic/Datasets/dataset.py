@@ -94,6 +94,14 @@ class Dataset:
 		if item == "test":
 			return self.test
 
+	@property
+	def weights(self):
+		c, n = self.train.classes
+		res = np.zeros(shape=(len(self.classes),))
+		for i, w in zip(c, n):
+			res[i] = w
+		return res/res.sum()
+
 	def shuffle(self):
 		trn_len = len(self.train)
 		val_len = len(self.valid)

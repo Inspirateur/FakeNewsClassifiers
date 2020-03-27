@@ -12,3 +12,4 @@ tensorboardX
 transformers
 ktrain
 eli5
+tqdm

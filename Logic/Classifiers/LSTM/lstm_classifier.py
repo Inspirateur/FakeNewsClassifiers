@@ -1,4 +1,4 @@
-import json
+import os
 from typing import Tuple
 from tensorflow.keras.layers import Dense, Embedding, LSTM, Bidirectional
 from tensorflow.keras.models import Sequential, load_model
@@ -7,12 +7,17 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.initializers import Constant
 import numpy as np
 from Logic.Classifiers.classifier import Classifier
+_path = "Logic/Classifiers/LSTM/"
 
 
 class LSTMClassifier(Classifier):
 	model: Sequential
 	vec: Tokenizer
 	maxlen: int
+
+	def __init__(self, data: str):
+		Classifier.__init__(self, data)
+		self.save_dir = _path + f"save_{self.d.name}/"
 
 	def train(self) -> float:
 		d = 100
@@ -68,18 +73,20 @@ class LSTMClassifier(Classifier):
 		x = pad_sequences(self.vec.texts_to_sequences(np.array([query])), self.maxlen)
 		pred = self.model.predict(x)[0]
 		score = self.d.score(pred)
-		return score, f"<p>Labelled {self.d.classes[list(self.d.classes.keys())[np.argmax(pred)]]}</p>"
+		return score, f"<p>Labelled <b>{list(self.d.classes.keys())[np.argmax(pred)]}</b></p>"
 
 	def save(self):
-		self.model.save(f"Logic/Classifiers/LSTM/save_{self.d.name}.h5")
-		with open(f"Logic/Classifiers/LSTM/vocab_{self.d.name}.json", "w") as ftoken:
+		if not os.path.exists(self.save_dir):
+			os.makedirs(self.save_dir)
+		self.model.save(f"{self.save_dir}model.h5")
+		with open(f"{self.save_dir}vocab.json", "w") as ftoken:
 			ftoken.write(self.vec.to_json())
-		with open(f"Logic/Classifiers/LSTM/maxlen_{self.d.name}.txt", "w") as fmaxlen:
+		with open(f"{self.save_dir}maxlen.txt", "w") as fmaxlen:
 			fmaxlen.write(str(self.maxlen))
 
 	def load(self):
-		with open(f"Logic/Classifiers/LSTM/vocab_{self.d.name}.json", "r") as ftoken:
+		with open(f"{self.save_dir}vocab.json", "r") as ftoken:
 			self.vec = tokenizer_from_json(ftoken.read())
-		with open(f"Logic/Classifiers/LSTM/maxlen_{self.d.name}.txt", "r") as fmaxlen:
+		with open(f"{self.save_dir}maxlen.txt", "r") as fmaxlen:
 			self.maxlen = int(fmaxlen.read().strip())
-		self.model = load_model(f"Logic/Classifiers/LSTM/save_{self.d.name}.h5")
+		self.model = load_model(f"{self.save_dir}model.h5")

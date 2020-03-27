@@ -11,7 +11,4 @@ Datasets must be put in Datasets/ with one folder per dataset:
 
 Just unzip them in their folders.
 
-## Collaborators in the semester project
- - Alexie Byrns
- - Jonathan Tremblay
- - Teo Orthlieb
+Collaborators in the semester project: Alexie Byrns, Jonathan Tremblay, Teo Orthlieb

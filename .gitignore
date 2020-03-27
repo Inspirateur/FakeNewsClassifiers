@@ -1,10 +1,8 @@
-test.py
-.idea/
 Logic/ExternalData/*
 Logic/Datasets/*
-Logic/Classifiers/**/*
-**__pycache__/
-Logic/Classifiers/**/save*
-!*.py
-!**README.md
-!**.EMPTY
+Logic/Classifiers/*/**
+!**/.py
+!**/README.md
+!**/.EMPTY
+**/__pycache__
+.idea

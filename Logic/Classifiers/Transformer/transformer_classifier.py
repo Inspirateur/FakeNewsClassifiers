@@ -116,21 +116,6 @@ class TransformerClassifier(Classifier):
 			res[i] = torch.argmax(logits, dim=1)
 		return res
 
-	def analyze(self, query) -> Tuple[float, str]:
-		self.model.eval()
-		# prepare input
-		X = torch.tensor(self._tokenize([query])).to(self.device)
-		# get logit as numpy ndarray
-		logits, = self.model(X)
-		logits = logits.view(-1).cpu().detach().numpy()
-		# apply softmax to convert to proba
-		elogits = np.exp(logits)
-		logits = elogits/elogits.sum()
-		# compute the trust score (dataset dependant)
-		score = self.d.score(logits)
-		# return the score and the label
-		return score, f"<p>Labelled <b>{list(self.d.classes.keys())[np.argmax(logits)]}</b></p>"
-
 	def save(self):
 		if not os.path.exists(self.save_dir):
 			os.makedirs(self.save_dir)

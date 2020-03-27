@@ -68,7 +68,9 @@ class Data:
 
 
 class Dataset:
-	def __init__(self, train: Data, valid: Data, test: Data, name: str = "", classes: Union[Dict[str, float], list] = None):
+	def __init__(
+			self, train: Data, valid: Data, test: Data, name: str = "", classes: Union[Dict[str, float], list] = None
+	):
 		self.train: Data = train
 		self.test: Data = test
 		self.valid: Data = valid
@@ -134,10 +136,3 @@ class Dataset:
 				text += ' '*lentable[i, j]+table[i, j]
 			text += '\n'
 		return text
-
-	def score(self, cprobs) -> float:
-		return sum((
-			self.classes[list(self.classes.keys())[i]]*p
-			for i, p in enumerate(cprobs)),
-			0.
-		)

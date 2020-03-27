@@ -6,7 +6,5 @@ Logic/Classifiers/**/*
 **__pycache__/
 Logic/Classifiers/**/save*
 !*.py
-Logic/analyzer.py
-client.py
 !**README.md
 !**.EMPTY

@@ -1,5 +1,4 @@
 import os
-from typing import Tuple
 from tensorflow.keras.layers import Dense, Embedding, LSTM, Bidirectional
 from tensorflow.keras.models import Sequential, load_model
 from keras.preprocessing.text import Tokenizer, tokenizer_from_json
@@ -68,12 +67,6 @@ class LSTMClassifier(Classifier):
 			),
 			axis=1
 		)
-
-	def analyze(self, query) -> Tuple[float, str]:
-		x = pad_sequences(self.vec.texts_to_sequences(np.array([query])), self.maxlen)
-		pred = self.model.predict(x)[0]
-		score = self.d.score(pred)
-		return score, f"<p>Labelled <b>{list(self.d.classes.keys())[np.argmax(pred)]}</b></p>"
 
 	def save(self):
 		if not os.path.exists(self.save_dir):

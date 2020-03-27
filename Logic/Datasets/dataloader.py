@@ -45,9 +45,3 @@ def get(dataset: str) -> Dataset:
 			"fake": 0, "satire": 0, "bias": 0.2, "conspiracy": 0, "state": 0, "junksci": 0,
 			"hate": 0, "clickbait": .5, "unreliable": .5, "rumor": .5, "political": .7, "reliable": 1
 		})
-	elif dataset == "reddit":
-		raw = np.load(f"{folder}/Reddit/data_train.pkl", allow_pickle=True)
-		data = Data(np.array(raw[0]), np.array(raw[1]))
-		# this has very little to do with fake news,
-		# it's just a text classification benchmark
-		return Dataset(*data.split(.8, .1), name="reddit")

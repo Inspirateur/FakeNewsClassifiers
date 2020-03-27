@@ -76,12 +76,6 @@ class Classifier:
 		"""
 		raise NotImplementedError
 
-	def analyze(self, query: str) -> Tuple[float, str]:
-		"""
-		Given a single input with the tokenized version and a vocab, return a score and an analysis
-		"""
-		raise NotImplementedError
-
 	def save(self):
 		"""
 		Must save the model on the disk

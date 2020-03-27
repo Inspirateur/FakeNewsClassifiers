@@ -1,5 +1,4 @@
 from Logic.Classifiers.classifier import Classifier
-from Logic.Classifiers.WikiInfoLinks.wikilinks_classifier import WikiLinksClassifier
 from Logic.Classifiers.NaiveBayes.nb_classifier import NBClassifier
 from Logic.Classifiers.LSTM.lstm_classifier import LSTMClassifier
 from Logic.Classifiers.Transformer.transformer_classifier import TransformerClassifier
@@ -46,12 +45,5 @@ def test_load(model: Classifier):
 	model.evaluate()
 
 
-def test_analyze(model: Classifier):
-	model.load()
-	sentence = "Incredible ! President Barack Obama is actually a lizard men !"
-	print(sentence)
-	print(model.analyze(sentence))
-
-
 # datasets: reddit, fake-news-kaggle, LIAR, fake-news-corpus
-test_analyze(TransformerClassifier("fake-news-corpus"))
+test_train(TransformerClassifier("fake-news-corpus"))

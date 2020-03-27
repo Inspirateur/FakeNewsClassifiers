@@ -4,13 +4,10 @@ This repository has been rewritten and improved by me (Teo Orthlieb) after the p
 to make it more usable and up-to-date.  
 
 Datasets must be put in Datasets/ with one folder per dataset, like so
-```
 Datasets:
-    > NELA-GT-2018      // dataset (a)
-    > LIAR              // dataset (b)
-    > fake-news         // dataset (c) 
-    > fake-News-corpus  // dataset (d)
-```
+ - LIAR              // [paper](https://sites.cs.ucsb.edu/~william/papers/acl2017.pdf), [download](https://sites.cs.ucsb.edu/~william/data/liar_dataset.zip)
+ - fake-news-kaggle  // [page](https://www.kaggle.com/c/fake-news/data)
+ - Fake-News-corpus  // [page](https://github.com/several27/FakeNewsCorpus)
 Just unzip them in their folders.
 
 Collaborators in the semester project:  
